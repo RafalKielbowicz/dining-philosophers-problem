@@ -1,40 +1,23 @@
 public class EatingPhilosophersProblem {
-    public static void main(String[] args) throws Exception {
 
-        Philosopher[] philosophers = new Philosopher[5];
-        Object[] forks = new Object[philosophers.length];
+    public static void main(String[] args) {
+        Philosopher philosopher1 = new Philosopher();
+        Philosopher philosopher2 = new Philosopher();
+        Philosopher philosopher3 = new Philosopher();
+        Philosopher philosopher4 = new Philosopher();
+        Philosopher philosopher5 = new Philosopher();
 
-        for (int i = 0; i < forks.length; i++) {
-            forks[i] = new Object();
-        }
+        Thread f1 = new Thread(philosopher1, "philosopher 1");
+        Thread f2 = new Thread(philosopher2, "philosopher 2");
+        Thread f3 = new Thread(philosopher3, "philosopher 3");
+        Thread f4 = new Thread(philosopher4, "philosopher 4");
+        Thread f5 = new Thread(philosopher5, "philosopher 5");
 
-        for (int i = 0; i < philosophers.length; i++) {
-
-            Object leftFork = forks[i];
-            Object rightFork = forks[(i + 1) % forks.length];
-
-            // The last philosopher picks up the right fork first
-            if (i == philosophers.length - 1) {
-                philosophers[i] = new Philosopher(rightFork, leftFork);
-            } else {
-                philosophers[i] = new Philosopher(leftFork, rightFork);
-            }
-
-            Thread t = new Thread(philosophers[i], "Philosopher " + (i + 1));
-            t.start();
-        }
+        f1.start();
+        f2.start();
+        f3.start();
+        f4.start();
+        f5.start();
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
