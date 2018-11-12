@@ -1,34 +1,47 @@
 public class Philosopher implements Runnable {
 
-    private final Object leftFork;
-    private final Object rightFork;
+    private int philosopher;
+    private Fork left;
+    private Fork right;
+    private int numOfEaten;
 
-    Philosopher(Object left, Object right) {
-        this.leftFork = left;
-        this.rightFork = right;
-    }
-
-    private void doAction(String action) throws InterruptedException {
-        System.out.println(Thread.currentThread().getName() + " " + action);
-        Thread.sleep(((int) (Math.random() * 5000)));
+    public Philosopher(int philosopher, Fork left, Fork right) {
+        this.philosopher = philosopher;
+        this.left = left;
+        this.right = right;
+        numOfEaten = 0;
     }
 
     @Override
     public void run() {
-        try {
-            while (true) {
-                doAction(System.nanoTime() + ": Thinking"); // thinking
-                synchronized (leftFork) {
-                    doAction(System.nanoTime() + ": Picked up left fork");
-                    synchronized (rightFork) {
-                        doAction(System.nanoTime() + ": Picked up right fork - eating"); // eating
-                        doAction(System.nanoTime() + ": Put down right fork");
-                    }
-                    doAction(System.nanoTime() + ": Put down left fork. Returning to thinking");
-                }
-            }
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
+        while(true) {
+            boolean hasFork;
+
+            //take left fork
+            System.out.println("Philosopher " + philosopher + " is waiting for fork " + left.getFork());
+            do {
+                hasFork = left.takeFork(philosopher);
+            } while (!hasFork);
+            System.out.println("Philosopher " + philosopher + " takes fork " + left.getFork());
+
+            System.out.println("Philosopher " + philosopher + " is waiting for fork " + right.getFork());
+            do {
+                hasFork = right.takeFork(philosopher);
+            } while (!hasFork);
+            System.out.println("Philosopher " + philosopher + " takes fork " + right.getFork());
+
+            //eat
+            System.out.println("Philosopher " + philosopher + " is eating");
+            numOfEaten++;
+            System.out.println("Philosopher eats schabowy for the " + numOfEaten + " time");
+
+            //put fork on table
+            System.out.println("Philosopher " +philosopher+ " put forks on table" );
+            left.putOnTable();
+            right.putOnTable();
+
+            System.out.println();
+
         }
     }
 }
